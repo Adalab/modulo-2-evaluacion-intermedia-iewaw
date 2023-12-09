@@ -1,7 +1,6 @@
 'use strict';
 
 //QUERY SELECTORS
-const form = document.querySelector('.js__form');
 const input = document.querySelector('.js__input');
 const button = document.querySelector('.js__button');
 const hint = document.querySelector('.js__hint');
@@ -43,7 +42,7 @@ function handleInput() {
         hint.innerHTML = 'Demasiado bajo.';
     } else if (userNumber > randomNumber) {
         hint.innerHTML = 'Demasiado alto.'
-    } else {
+    } else if (userNumber === randomNumber) {
         hint.innerHTML = 'Has ganado, campeona!!!'
     }
 }
