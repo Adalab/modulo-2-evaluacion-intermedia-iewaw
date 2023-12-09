@@ -4,6 +4,8 @@
     margin: 0;
 }
 
-body {
+.main {
     background-color: azure;
+    display: flex;
+    flex-direction: column;
 }
