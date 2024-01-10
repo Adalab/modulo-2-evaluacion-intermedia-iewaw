@@ -46,3 +46,7 @@
 .game__hint {
     font-weight: bold;
 }
+
+.hidden {
+    display: none;
+}

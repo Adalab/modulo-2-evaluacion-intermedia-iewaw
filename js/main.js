@@ -1,10 +1,11 @@
 'use strict';
 
 //QUERY SELECTORS
-const input = document.querySelector('.js__input');
-const button = document.querySelector('.js__button');
-const hint = document.querySelector('.js__hint');
-const counter = document.querySelector('.js__counter');
+const textInput = document.querySelector('.js__input');
+const gameButton = document.querySelector('.js__button');
+const hintContent = document.querySelector('.js__hint');
+const counterValue = document.querySelector('.js__counter');
+const resetButton = document.querySelector('.js__reset__button');
 
 //GLOBAL VARIABLES
 let userNumber = 0;
@@ -17,32 +18,64 @@ window.addEventListener('load', (event) => {
     console.log(randomNumber);
 });
 
-input.addEventListener('input', getNumber);
+textInput.addEventListener('input', getNumber);
 
-button.addEventListener('click', handleInput);
+gameButton.addEventListener('click', handleInput);
+
+resetButton.addEventListener('click', resetGame);
 
 //FUNCTIONS
+
+function resetGame() {
+    event.preventDefault();
+    randomNumber = getRandomNumber(100);
+    attempts = 0;
+    fillInnerHtml(hintContent, 'Escribe el número y dale a Prueba.');
+    fillInnerHtml(counterValue, `Número de intentos: ${attempts}`);
+    textInput.value = '';
+    gameButton.classList.remove('hidden');
+}
+
 function getRandomNumber(max) {
     return Math.ceil(Math.random() * max);
 }
 
 function getNumber() {
-    userNumber = parseInt(input.value);
+    userNumber = parseInt(textInput.value);
 }
 
 function handleInput() {
     event.preventDefault();
-    attempts++;
 
-    counter.innerHTML = 'Número de intentos: ' + attempts;
+    evaluateNumber(userNumber);
 
-    if (userNumber < 1 || userNumber > 100) {
-        hint.innerHTML = 'El número debe estar entre 1 y 100.';
+    countAttempts();
+}
+
+function evaluateNumber(userNumber) {
+    if (isNaN(userNumber)) {
+        fillInnerHtml(hintContent, 'Introduce un valor numérico entre 1 y 100.');
+    } else if (userNumber < 1 || userNumber > 100) {
+        fillInnerHtml(hintContent, 'El número debe estar entre 1 y 100.');
     } else if (userNumber < randomNumber) {
-        hint.innerHTML = 'Demasiado bajo.';
+        fillInnerHtml(hintContent, 'Demasiado bajo.');
     } else if (userNumber > randomNumber) {
-        hint.innerHTML = 'Demasiado alto.'
+        fillInnerHtml(hintContent, 'Demasiado alto.');
     } else if (userNumber === randomNumber) {
-        hint.innerHTML = 'Has ganado, campeona!!!'
+        fillInnerHtml(hintContent, 'Has ganado, campeona!!!');
     }
+}
+
+function countAttempts() {
+    attempts++;
+    fillInnerHtml(counterValue, `Número de intentos: ${attempts}`);
+
+    if (attempts >= 10) {
+        fillInnerHtml(hintContent, 'Demasiados intentos, game over!');
+        gameButton.classList.add('hidden');
+    }
+}
+
+function fillInnerHtml(element, content) {
+    element.innerHTML = content;
 }
